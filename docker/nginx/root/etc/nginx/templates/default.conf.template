@@ -1,0 +1,24 @@
+upstream fastcgi_backend {
+   server ${FPM_HOST}:${FPM_PORT};
+}
+
+upstream fastcgi_backend_debug {
+   server ${FPM_DEBUG_HOST}:${FPM_DEBUG_PORT};
+}
+
+map $http_cookie $backend {
+    default fastcgi_backend;
+    "~XDEBUG_SESSION=" fastcgi_backend_debug;
+}
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+
+    server_name _;
+
+    set $MAGE_ROOT /app;
+    set $MAGE_DEBUG_SHOW_ARGS 0;
+
+    include /etc/nginx/includes/magento.conf;
+}
