@@ -21,6 +21,8 @@ services:
       context: docker/varnish
     environment:
       VARNISH_SIZE: 1024M
+      BACKEND_HOST: nginx
+      BACKEND_PORT: 80
     depends_on:
       - nginx
     volumes:
