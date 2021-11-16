@@ -20,19 +20,19 @@ bin/magento cache:clean
 
 ### For existing project
 ```bash
-git clone <yourproject> docker-magento-project
+git clone <yourproject> magento-project
 git clone git@github.com:tkotosz/docker-magento.git docker-magento
 rm -rf docker-magento/.git docker-magento/.gitignore
-cp -R docker-magento/* docker-magento-project
+cp -R docker-magento/* magento-project/
 rm -rf docker-magento
-cd docker-magento-project
-cp docker/env.php.sample project/app/etc/env.php
-cp ~/.composer/auth.json project/auth.json
+cp magento-project/docker/env.php.sample magento-project/app/etc/env.php
+cp ~/.composer/auth.json magento-project/auth.json
+cd magento-project
 docker-compose up -d --remove-orphans
 docker-compose exec --user=appuser console bash
 composer install
 zcat magento.sql.gz | mysql -uroot -proot -hdatabase magentodb
-mysql -uroot -proot -hdatabase magentodb -e "update core_config_data set value='https://docker-test-project.local/' where path like '%/base_url';"
+mysql -uroot -proot -hdatabase magentodb -e "update core_config_data set value='https://magento-project.local/' where path like '%/base_url';"
 mysql -uroot -proot -hdatabase magentodb -e "delete from core_config_data where path like '%admin/url/%'"
 bin/magento setup:upgrade
 bin/magento config:set --scope=default --scope-code=0 system/full_page_cache/caching_application 2
@@ -41,7 +41,7 @@ bin/magento cache:clean
 
 ### Add hosts file entry
 ```bash
-echo "127.0.0.1 ::1 docker-test-project.local" | sudo tee -a /etc/hosts
+echo "127.0.0.1 ::1 magento-project.local" | sudo tee -a /etc/hosts
 ```
 
 ## Environment Details
