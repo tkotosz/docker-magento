@@ -1,4 +1,9 @@
 ARG XDEBUG=0
+
+###########################################
+## Prepare base php image for magento:
+## - install required php extensions
+###########################################
 FROM php:7.4-cli-alpine AS php7.4-cli-alpine-magento
 
 # Install php extension installer tool
@@ -35,6 +40,12 @@ RUN install-php-extensions \
 ENTRYPOINT ["sleep","infinity"]
 
 
+#######################################
+## Extend base php magento image:
+## - install sendmail
+## - override www-data user id
+## - install tools (mysql-client, composer, etc)
+#######################################
 FROM php7.4-cli-alpine-magento AS php7.4-cli-alpine-magento-dev
 
 # Install & configure mhsendmail
@@ -79,11 +90,15 @@ RUN curl -O https://files.magerun.net/n98-magerun2.phar \
 COPY root /
 
 
-## Image without xdebug
+##################################
+## DEV env image without xdebug
+##################################
 FROM php7.4-cli-alpine-magento-dev AS php7.4-cli-alpine-magento-dev-0
 
 
-## Image with xdebug
+##############################
+## DEV env image with xdebug
+##############################
 FROM php7.4-cli-alpine-magento-dev AS php7.4-cli-alpine-magento-dev-1
 
 # Install & configure xdebug
@@ -103,7 +118,10 @@ COPY --from=tkotosz/resolve-docker-host-ip /usr/bin/resolve-docker-host-ip /usr/
 ENTRYPOINT ["/usr/local/bin/resolve-docker-host-ip","sleep","infinity"]
 
 
-## Final image (choose default or xdebug version)
+###################################################
+## Final DEV env image:
+## - with or without xdebug based on ${XDEBUG} arg
+###################################################
 FROM php7.4-cli-alpine-magento-dev-${XDEBUG} AS final
 
 WORKDIR /app
