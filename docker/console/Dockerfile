@@ -61,7 +61,6 @@ ARG APP_GROUP_ID=1000
 RUN addgroup -g ${APP_GROUP_ID} appuser \
     && adduser -u ${APP_USER_ID} -G appuser -h /home/appuser -s /bin/sh -D appuser
 
-
 # Install additional tools
 RUN apk add --no-cache \
     # only sh available by default
@@ -71,14 +70,16 @@ RUN apk add --no-cache \
     # required for patch applies
     patch \
     git \
-    # required for prefer-source composer install
+    # required for composer install
+    zip \
+    unzip \
     openssh-client
 
 # Configure bash promt
 RUN echo 'export PS1="$(whoami)@$(hostname):$(pwd)$ "' >> /home/appuser/.bashrc
 
-# Install composer
-COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
+# Install composer 2
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Install n98 magerun
 RUN curl -O https://files.magerun.net/n98-magerun2.phar \
