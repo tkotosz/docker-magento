@@ -126,4 +126,3 @@ ENTRYPOINT ["/usr/local/bin/resolve-docker-host-ip","sleep","infinity"]
 FROM php7.4-cli-alpine-magento-dev-${XDEBUG} AS final
 
 WORKDIR /app
-USER appuser
