@@ -8,7 +8,7 @@ git clone git@github.com:tkotosz/docker-magento.git docker-magento-demo
 cd docker-magento-demo
 docker-compose up -d --remove-orphans
 docker-compose exec --user=appuser console bash
-composer create-project --no-install --repository=https://repo.magento.com/ magento/project-community-edition=2.4.3-p2 /tmp/magento
+composer create-project --no-install --repository=https://repo.magento.com/ magento/project-community-edition=2.4.4 /tmp/magento
 cp -R /tmp/magento/* .
 rm -rf /tmp/magento
 composer install
