@@ -116,7 +116,7 @@ services:
       - backend
 
   redis-cache:
-    image: redis:6
+    image: redis:6.2
     # 1GB; evict any least recently used key even if they don't have a TTL
     command:
       - '--maxmemory 1073742000'
@@ -128,7 +128,7 @@ services:
       - backend
 
   redis-session:
-    image: redis:6
+    image: redis:6.2
     # 1GB; evict key that would expire soonest
     command:
       - '--maxmemory 1073742000'
