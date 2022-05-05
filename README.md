@@ -1,6 +1,6 @@
 # docker-magento
 
-DEV env for Magento 2.4
+DEV env for Magento 2.4.4
 
 ## Setup the project
 

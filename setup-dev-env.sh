@@ -5,7 +5,7 @@ set -ex
 PROJECT_HOST="docker-test-project.local"
 
 docker-compose down --remove-orphans --volumes
-docker-compose up -d --remove-orphans --build
+docker-compose up -d --remove-orphans
 sleep 1
 docker-compose ps
 

@@ -16,7 +16,7 @@ services:
       - backend
 
   varnish:
-    image: tkotosz/varnish6-magento-dev:latest
+    image: tkotosz/varnish7-magento-dev:latest
     environment:
       VARNISH_SIZE: 1024M
       BACKEND_HOST: nginx
@@ -45,7 +45,7 @@ services:
       - backend
 
   php-fpm:
-    image: tkotosz/php7.4-fpm-alpine-magento-dev:latest
+    image: tkotosz/php8.1-fpm-alpine-magento-dev:latest
     environment:
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
@@ -62,7 +62,7 @@ services:
       - backend
 
   php-fpm-debug:
-    image: tkotosz/php7.4-fpm-alpine-magento-dev-debug:latest
+    image: tkotosz/php8.1-fpm-alpine-magento-dev-debug:latest
     environment:
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
@@ -103,7 +103,7 @@ services:
       - backend
 
   redis-cache:
-    image: redis:6
+    image: redis:6.2
     # 1GB; evict any least recently used key even if they don't have a TTL
     command:
       - '--maxmemory 1073742000'
@@ -115,7 +115,7 @@ services:
       - backend
 
   redis-session:
-    image: redis:6
+    image: redis:6.2
     # 1GB; evict key that would expire soonest
     command:
       - '--maxmemory 1073742000'
@@ -127,7 +127,7 @@ services:
       - backend
 
   rabbitmq:
-    image: rabbitmq:3.8-management-alpine
+    image: rabbitmq:3.9-management
     environment:
       RABBITMQ_DEFAULT_USER: rabbit_magento
       RABBITMQ_DEFAULT_VHOST: rabbit_magento
@@ -146,7 +146,7 @@ services:
       - backend
 
   console:
-    image: tkotosz/php7.4-cli-alpine-magento-dev:latest
+    image: tkotosz/php8.1-cli-alpine-magento-dev:latest
     environment:
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
@@ -163,7 +163,7 @@ services:
       - backend
 
   console-debug:
-    image: tkotosz/php7.4-cli-alpine-magento-dev-debug:latest
+    image: tkotosz/php8.1-cli-alpine-magento-dev-debug:latest
     environment:
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
