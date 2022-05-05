@@ -1,7 +1,7 @@
 #!/bin/sh
 
 VERSION="${1:-latest}"
-NAME="varnish6-magento-dev"
+NAME="varnish7-magento-dev"
 
 docker build --tag tkotosz/$NAME:$VERSION .
 

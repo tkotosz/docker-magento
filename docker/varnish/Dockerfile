@@ -1,4 +1,4 @@
-FROM varnish:6
+FROM varnish:7.0
 
 # Install debian package installer script
 # See https://github.com/tkotosz/debian-package-clean-install
