@@ -10,7 +10,7 @@ cd docker-magento
 ./setup-dev-env.sh
 ```
 
-Docker images built from: https://github.com/tkotosz/docker-magento/tree/2.4.2-develop
+Docker images built from: https://github.com/tkotosz/docker-magento/tree/2.4.4-develop
 
 ## Optional steps
 
