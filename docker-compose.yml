@@ -140,7 +140,7 @@ services:
       - backend
 
   rabbitmq:
-    image: rabbitmq:3.8-management-alpine
+    image: rabbitmq:3.9-management
     environment:
       RABBITMQ_DEFAULT_USER: rabbit_magento
       RABBITMQ_DEFAULT_VHOST: rabbit_magento
