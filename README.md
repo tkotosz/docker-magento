@@ -1,6 +1,6 @@
 # docker-magento
 
-DEV env for Magento 2.4
+DEV env for Magento 2.4.3
 
 ## Setup the project
 
@@ -10,7 +10,7 @@ cd docker-magento
 ./setup-dev-env.sh
 ```
 
-Docker images built from: https://github.com/tkotosz/docker-magento/tree/2.4.2-develop
+Docker images built from: https://github.com/tkotosz/docker-magento/tree/2.4.3-develop
 
 ## Optional steps
 
