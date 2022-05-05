@@ -4,31 +4,39 @@ ARG XDEBUG=0
 ## Prepare base php-fpm image for magento:
 ## - install required php extensions
 ###########################################
-FROM php:7.4-fpm-alpine AS php7.4-fpm-alpine-magento
+FROM php:8.1-fpm-alpine AS php8.1-fpm-alpine-magento
 
 # Install php extension installer tool
 # See https://github.com/mlocati/docker-php-extension-installer
 COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install required PHP extensions
-# See https://devdocs.magento.com/guides/v2.4/install-gde/prereq/php-settings.html#verify-installed-extensions
+# See https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#php-extensions
 RUN install-php-extensions \
   bcmath \
   ctype \
   curl \
   dom \
+  fileinfo \
   gd \
   hash \
   iconv \
   intl \
+  json \
+  libxml \
   mbstring \
   openssl \
+  pcre \
   pdo_mysql \
   simplexml \
   soap \
+  sockets \
+  sodium \
+  spl \
+  tokenizer \
+  xmlwriter \
   xsl \
-  zip \
-  sockets
+  zip
 
 # Install additional PHP extensions
 RUN install-php-extensions \
@@ -43,7 +51,7 @@ RUN install-php-extensions \
 ## - install sendmail
 ## - override www-data user id
 #######################################
-FROM php7.4-fpm-alpine-magento AS php7.4-fpm-alpine-magento-dev
+FROM php8.1-fpm-alpine-magento AS php8.1-fpm-alpine-magento-dev
 
 # Install & configure mhsendmail
 # See https://github.com/tkotosz/docker-mhsendmail
@@ -65,13 +73,13 @@ COPY root /
 ##################################
 ## DEV env image without xdebug
 ##################################
-FROM php7.4-fpm-alpine-magento-dev AS php7.4-fpm-alpine-magento-dev-0
+FROM php8.1-fpm-alpine-magento-dev AS php8.1-fpm-alpine-magento-dev-0
 
 
 ##############################
 ## DEV env image with xdebug
 ##############################
-FROM php7.4-fpm-alpine-magento-dev AS php7.4-fpm-alpine-magento-dev-1
+FROM php8.1-fpm-alpine-magento-dev AS php8.1-fpm-alpine-magento-dev-1
 
 # Install and configure xdebug
 RUN install-php-extensions xdebug
@@ -93,7 +101,7 @@ ENTRYPOINT ["/usr/local/bin/resolve-docker-host-ip","php-fpm"]
 ## Final DEV env image:
 ## - with or without xdebug based on ${XDEBUG} arg
 ###################################################
-FROM php7.4-fpm-alpine-magento-dev-${XDEBUG} AS php7.4-fpm-alpine-magento-dev-final
+FROM php8.1-fpm-alpine-magento-dev-${XDEBUG} AS php8.1-fpm-alpine-magento-dev-final
 
 WORKDIR /app
 
