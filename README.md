@@ -81,7 +81,7 @@ Purpose: Database
 
 ### elasticsearch service
 
-Uses: elasticsearch 7.16.3
+Uses: elasticsearch 7.17.9
 Purpose: Search engine
 
 ### redis-cache service
