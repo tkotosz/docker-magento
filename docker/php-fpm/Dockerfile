@@ -11,7 +11,7 @@ FROM php:8.1-fpm-alpine AS php8.1-fpm-alpine-magento
 COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install required PHP extensions
-# See https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#php-extensions
+# See https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/system-requirements.html
 RUN install-php-extensions \
   bcmath \
   ctype \
