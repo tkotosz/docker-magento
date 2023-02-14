@@ -56,7 +56,7 @@ See more details [here](https://github.com/varnish/docker-varnish#tls).
 
 ### varnish service
 
-Uses: varnish 6
+Uses: varnish 7
 Purpose: Reverse-proxy full page cache. On cache-miss passes the request to the nginx service.
 
 ### nginx service
@@ -66,12 +66,12 @@ Purpose: Main webserver passes requests to the php-fpm or php-fpm-debug service 
 
 ### php-fpm service
 
-Uses: php-fpm 7.4
+Uses: php-fpm 8.1
 Purpose: Main FastCGI backend, receives requests from the nginx service in non-debug mode.
 
 ### php-fpm-debug service
 
-Uses: php-fpm 7.4
+Uses: php-fpm 8.1
 Purpose: Debug FastCGI backend, receives requests from the nginx service in debug-mode.
 
 ### database service
@@ -86,17 +86,17 @@ Purpose: Search engine
 
 ### redis-cache service
 
-Uses: redis 6
+Uses: redis 6.2
 Purpose: Cache backend for all caches except FPC (FPC replaced by varnish reverse-proxy).
 
 ### redis-session service
 
-Uses: redis 6
+Uses: redis 6.2
 Purpose: Cache backend for sessions
 
 ### rabbitmq service
 
-Uses: rabbitmq 3.8
+Uses: rabbitmq 3.9
 Purpose: Message broker for "async" operations.
 
 ### mailhog service
@@ -106,12 +106,12 @@ Purpose: Catches outgoing emails.
 
 ### console service
 
-Uses: php cli 7.4
+Uses: php cli 8.1
 Purpose: Development console, you can run composer, bin/magento, etc in it in non-debug mode.
 
 ### console-debug service
 
-Uses: php cli 7.4
+Uses: php cli 8.1
 Purpose: Development console, you can run composer, bin/magento, etc in it in debug mode.
 
 ## How to use xdebug
