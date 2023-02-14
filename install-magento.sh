@@ -4,7 +4,7 @@ set -ex
 
 PROJECT_HOST=$1
 
-composer create-project --no-install --repository=https://repo.magento.com/ magento/project-community-edition=2.4.4-p2 /tmp/magento
+composer create-project --no-install --repository=https://repo.magento.com/ magento/project-community-edition=2.4.5-p1 /tmp/magento
 cp -R /tmp/magento/* .
 rm -rf /tmp/magento
 composer install
