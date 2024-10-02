@@ -1,8 +1,10 @@
-FROM varnish:7.0
+FROM varnish:7.5
+USER root
 
 # Install debian package installer script
 # See https://github.com/tkotosz/debian-package-clean-install
 COPY --from=tkotosz/debian-package-clean-install /usr/bin/debian-package-clean-install /usr/local/bin/
+
 
 # Install envsubst (part of gettext-base)
 RUN debian-package-clean-install gettext-base

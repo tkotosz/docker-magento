@@ -1,4 +1,4 @@
-FROM nginx:1.19-alpine
+FROM nginx:1.24-alpine
 ENV FPM_HOST=php-fpm
 ENV FPM_PORT=9000
 ENV FPM_DEBUG_HOST=php-fpm

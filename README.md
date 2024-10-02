@@ -8,11 +8,11 @@ git clone git@github.com:tkotosz/docker-magento.git docker-magento-demo
 cd docker-magento-demo
 docker-compose up -d --remove-orphans
 docker-compose exec --user=appuser console bash
-composer create-project --no-install --repository=https://repo.magento.com/ magento/project-community-edition=2.4.5-p1 /tmp/magento
+composer create-project --no-install --repository=https://repo.magento.com/ magento/project-community-edition=2.4.7-p2 /tmp/magento
 cp -R /tmp/magento/* .
 rm -rf /tmp/magento
 composer install
-bin/magento setup:install --admin-email "foobar@gmail.com" --admin-firstname "admin" --admin-lastname "admin" --admin-password "admin123" --admin-user "admin" --backend-frontname "admin" --base-url "https://docker-test-project.local/" --use-rewrites 1 --use-secure 1 --db-host "database" --db-name "magentodb" --db-user "magento" --db-password "magento" --session-save "redis" --session-save-redis-host "redis-session" --session-save-redis-port 6379 --session-save-redis-db 1 --cache-backend "redis" --cache-backend-redis-server "redis-cache" --cache-backend-redis-port 6379 --cache-backend-redis-db 2 --page-cache "redis" --page-cache-redis-server "redis-cache" --page-cache-redis-port 6379 --page-cache-redis-db 3 --search-engine "elasticsearch7" --elasticsearch-host "elasticsearch" --elasticsearch-port 9200 --amqp-host "rabbitmq" --amqp-port 5672 --amqp-user "rabbit_magento" --amqp-password "rabbit_magento" --amqp-virtualhost "rabbit_magento" --http-cache-hosts "varnish:80"
+bin/magento setup:install --admin-email "foobar@gmail.com" --admin-firstname "admin" --admin-lastname "admin" --admin-password "admin123" --admin-user "admin" --backend-frontname "admin" --base-url "https://docker-test-project.local/" --use-rewrites 1 --use-secure 1 --db-host "database" --db-name "magentodb" --db-user "magento" --db-password "magento" --session-save "redis" --session-save-redis-host "redis-session" --session-save-redis-port 6379 --session-save-redis-db 1 --cache-backend "redis" --cache-backend-redis-server "redis-cache" --cache-backend-redis-port 6379 --cache-backend-redis-db 2 --page-cache "redis" --page-cache-redis-server "redis-cache" --page-cache-redis-port 6379 --page-cache-redis-db 3 --search-engine "opensearch" --opensearch-host "search" --opensearch-port 9200 --amqp-host "rabbitmq" --amqp-port 5672 --amqp-user "rabbit_magento" --amqp-password "rabbit_magento" --amqp-virtualhost "rabbit_magento" --http-cache-hosts "varnish:80"
 bin/magento setup:upgrade
 bin/magento config:set --scope=default --scope-code=0 system/full_page_cache/caching_application 2
 bin/magento cache:clean
@@ -48,7 +48,7 @@ echo "127.0.0.1 ::1 docker-test-project.local" | sudo tee -a /etc/hosts
 
 ### nginx-tls-offload service
 
-Uses: nginx 1.19
+Uses: nginx 1.24
 Purpose:
 Listen on host port 80 (http) and 443 (https) and forward the incoming requests to the varnish service.
 This service is needed because varnish does not support https, so TLS-offload required before passing the incoming request to it.
@@ -56,47 +56,47 @@ See more details [here](https://github.com/varnish/docker-varnish#tls).
 
 ### varnish service
 
-Uses: varnish 7
+Uses: varnish 7.5
 Purpose: Reverse-proxy full page cache. On cache-miss passes the request to the nginx service.
 
 ### nginx service
 
-Uses: nginx 1.19
+Uses: nginx 1.24
 Purpose: Main webserver passes requests to the php-fpm or php-fpm-debug service based on XDEBUG_SESSION cookie.
 
 ### php-fpm service
 
-Uses: php-fpm 8.1
+Uses: php-fpm 8.3
 Purpose: Main FastCGI backend, receives requests from the nginx service in non-debug mode.
 
 ### php-fpm-debug service
 
-Uses: php-fpm 8.1
+Uses: php-fpm 8.3
 Purpose: Debug FastCGI backend, receives requests from the nginx service in debug-mode.
 
 ### database service
 
-Uses: mysql 8.0
+Uses: mariadb 10.6
 Purpose: Database
 
-### elasticsearch service
+### search service
 
-Uses: elasticsearch 7.17.9
+Uses: opensearch 2.12.0
 Purpose: Search engine
 
 ### redis-cache service
 
-Uses: redis 6.2
+Uses: redis 7.2
 Purpose: Cache backend for all caches except FPC (FPC replaced by varnish reverse-proxy).
 
 ### redis-session service
 
-Uses: redis 6.2
+Uses: redis 7.2
 Purpose: Cache backend for sessions
 
 ### rabbitmq service
 
-Uses: rabbitmq 3.9
+Uses: rabbitmq 3.13
 Purpose: Message broker for "async" operations.
 
 ### mailhog service
@@ -106,12 +106,12 @@ Purpose: Catches outgoing emails.
 
 ### console service
 
-Uses: php cli 8.1
+Uses: php cli 8.3
 Purpose: Development console, you can run composer, bin/magento, etc in it in non-debug mode.
 
 ### console-debug service
 
-Uses: php cli 8.1
+Uses: php cli 8.3
 Purpose: Development console, you can run composer, bin/magento, etc in it in debug mode.
 
 ## How to use xdebug

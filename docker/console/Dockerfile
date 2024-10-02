@@ -4,11 +4,11 @@ ARG XDEBUG=0
 ## Prepare base php image for magento:
 ## - install required php extensions
 ###########################################
-FROM php:8.1-cli-alpine AS php8.1-cli-alpine-magento
+FROM php:8.3-cli-alpine AS php83-cli-alpine-magento
 
 # Install php extension installer tool
 # See https://github.com/mlocati/docker-php-extension-installer
-COPY --from=mlocati/php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:2.5.1 /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install required PHP extensions
 # See https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/system-requirements.html
@@ -18,6 +18,7 @@ RUN install-php-extensions \
   curl \
   dom \
   fileinfo \
+  filter \
   gd \
   hash \
   iconv \
@@ -36,7 +37,8 @@ RUN install-php-extensions \
   tokenizer \
   xmlwriter \
   xsl \
-  zip
+  zip \
+  zlib
 
 # Install additional PHP extensions
 RUN install-php-extensions \
@@ -54,7 +56,7 @@ ENTRYPOINT ["sleep","infinity"]
 ## - override www-data user id
 ## - install tools (mysql-client, composer, etc)
 #######################################
-FROM php8.1-cli-alpine-magento AS php8.1-cli-alpine-magento-dev
+FROM php83-cli-alpine-magento AS php83-cli-alpine-magento-dev
 
 # Install & configure mhsendmail
 # See https://github.com/tkotosz/docker-mhsendmail
@@ -102,13 +104,13 @@ COPY root /
 ##################################
 ## DEV env image without xdebug
 ##################################
-FROM php8.1-cli-alpine-magento-dev AS php8.1-cli-alpine-magento-dev-0
+FROM php83-cli-alpine-magento-dev AS php83-cli-alpine-magento-dev-0
 
 
 ##############################
 ## DEV env image with xdebug
 ##############################
-FROM php8.1-cli-alpine-magento-dev AS php8.1-cli-alpine-magento-dev-1
+FROM php83-cli-alpine-magento-dev AS php83-cli-alpine-magento-dev-1
 
 # Install & configure xdebug
 RUN install-php-extensions xdebug
@@ -131,6 +133,6 @@ ENTRYPOINT ["/usr/local/bin/resolve-docker-host-ip","sleep","infinity"]
 ## Final DEV env image:
 ## - with or without xdebug based on ${XDEBUG} arg
 ###################################################
-FROM php8.1-cli-alpine-magento-dev-${XDEBUG} AS final
+FROM php83-cli-alpine-magento-dev-${XDEBUG} AS final
 
 WORKDIR /app
