@@ -1,0 +1,12 @@
+services:
+  console:
+    volumes:
+      - ~/.ssh:/home/appuser/.ssh
+
+  console-debug:
+    volumes:
+      - ~/.ssh:/home/appuser/.ssh
+
+  nginx-proxy:
+    volumes:
+      - ./certs:/etc/nginx/certs
