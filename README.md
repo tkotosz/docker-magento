@@ -23,3 +23,9 @@ Env from pre-built images: https://github.com/tkotosz/docker-magento/tree/2.4.4-
 Env from local images: https://github.com/tkotosz/docker-magento/tree/2.4.5-develop
 
 Env from pre-built images: https://github.com/tkotosz/docker-magento/tree/2.4.5-test
+
+## DEV env for Magento 2.4.7
+
+Env from local images: https://github.com/tkotosz/docker-magento/tree/2.4.7-develop
+
+Env from pre-built images: https://github.com/tkotosz/docker-magento/tree/2.4.7-test
