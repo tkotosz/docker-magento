@@ -1,6 +1,6 @@
 # docker-magento
 
-DEV env for Magento 2.4.5
+DEV env for Magento 2.4.7
 
 ## Setup the project
 
@@ -10,7 +10,7 @@ cd docker-magento
 ./setup-dev-env.sh
 ```
 
-Docker images built from: https://github.com/tkotosz/docker-magento/tree/2.4.5-develop
+Docker images built from: https://github.com/tkotosz/docker-magento/tree/2.4.7-develop
 
 ## Optional steps
 
@@ -18,8 +18,6 @@ Docker images built from: https://github.com/tkotosz/docker-magento/tree/2.4.5-d
 
 Update `docker-compose.override.yml` with this (create the file if doesn't exist):
 ```yml
-version: '3.7'
-
 services:
   console:
     volumes:
@@ -46,8 +44,6 @@ mkcert -key-file nginx.key -cert-file nginx.crt docker-test-project.local *.dock
 
 Update `docker-compose.override.yml` with this (create the file if doesn't exist) to mount the cert:
 ```yml
-version: '3.7'
-
 services:
   nginx-proxy:
     volumes:

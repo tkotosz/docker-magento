@@ -1,8 +1,6 @@
-version: '3.7'
-
 services:
   nginx-proxy:
-    image: tkotosz/nginx1.19-proxy-alpine-magento-dev:latest
+    image: tkotosz/nginx1.24-proxy-alpine-magento-dev:latest
     environment:
       PROXY_PASS_URL: 'http://varnish'
     depends_on:
@@ -16,7 +14,7 @@ services:
       - backend
 
   varnish:
-    image: tkotosz/varnish7-magento-dev:latest
+    image: tkotosz/varnish7.5-magento-dev:latest
     environment:
       VARNISH_SIZE: 1024M
       BACKEND_HOST: nginx
@@ -27,12 +25,12 @@ services:
       - type: tmpfs
         target: /var/lib/varnish:exec
         tmpfs:
-          size: "100000"
+          size: 100000
     networks:
       - backend
 
   nginx:
-    image: tkotosz/nginx1.19-alpine-magento-dev:latest
+    image: tkotosz/nginx1.24-alpine-magento-dev:latest
     environment:
       FPM_HOST: php-fpm
       FPM_DEBUG_HOST: php-fpm-debug
@@ -45,13 +43,13 @@ services:
       - backend
 
   php-fpm:
-    image: tkotosz/php8.1-fpm-alpine-magento-dev:latest
+    image: tkotosz/php8.3-fpm-alpine-magento-dev:latest
     environment:
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
     depends_on:
       - database
-      - elasticsearch
+      - search
       - redis-cache
       - redis-session
       - rabbitmq
@@ -62,13 +60,13 @@ services:
       - backend
 
   php-fpm-debug:
-    image: tkotosz/php8.1-fpm-alpine-magento-dev-debug:latest
+    image: tkotosz/php8.3-fpm-alpine-magento-dev-debug:latest
     environment:
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
     depends_on:
       - database
-      - elasticsearch
+      - search
       - redis-cache
       - redis-session
       - rabbitmq
@@ -79,31 +77,31 @@ services:
       - backend
 
   database:
-    image: mysql:8.0
+    image: mariadb:10.6
     command:
       - '--default-authentication-plugin=mysql_native_password'
       - '--log_bin_trust_function_creators=1'
       - '--max_allowed_packet=4M'
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: magento
-      MYSQL_PASSWORD: magento
-      MYSQL_DATABASE: magentodb
-    volumes:
-      - database-data:/var/lib/mysql
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_USER: magento
+      MARIADB_PASSWORD: magento
+      MARIADB_DATABASE: magentodb
     networks:
       - backend
 
-  elasticsearch:
-    image: elasticsearch:7.17.9
+  search:
+    image: opensearchproject/opensearch:2.12.0
     environment:
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
       - discovery.type=single-node
+      - plugins.security.disabled=true
+      - DISABLE_INSTALL_DEMO_CONFIG=true
     networks:
       - backend
 
   redis-cache:
-    image: redis:6.2
+    image: redis:7.2
     # 1GB; evict any least recently used key even if they don't have a TTL
     command:
       - '--maxmemory 1073742000'
@@ -115,7 +113,7 @@ services:
       - backend
 
   redis-session:
-    image: redis:6.2
+    image: redis:7.2
     # 1GB; evict key that would expire soonest
     command:
       - '--maxmemory 1073742000'
@@ -127,7 +125,7 @@ services:
       - backend
 
   rabbitmq:
-    image: rabbitmq:3.9-management
+    image: rabbitmq:3.13-management
     environment:
       RABBITMQ_DEFAULT_USER: rabbit_magento
       RABBITMQ_DEFAULT_VHOST: rabbit_magento
@@ -146,13 +144,13 @@ services:
       - backend
 
   console:
-    image: tkotosz/php8.1-cli-alpine-magento-dev:latest
+    image: tkotosz/php8.3-cli-alpine-magento-dev:latest
     environment:
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
     depends_on:
       - database
-      - elasticsearch
+      - search
       - redis-cache
       - redis-session
       - rabbitmq
@@ -163,13 +161,13 @@ services:
       - backend
 
   console-debug:
-    image: tkotosz/php8.1-cli-alpine-magento-dev-debug:latest
+    image: tkotosz/php8.3-cli-alpine-magento-dev-debug:latest
     environment:
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
     depends_on:
       - database
-      - elasticsearch
+      - search
       - redis-cache
       - redis-session
       - rabbitmq
@@ -182,6 +180,3 @@ services:
 networks:
   backend:
     driver: bridge
-
-volumes:
-  database-data: {}
